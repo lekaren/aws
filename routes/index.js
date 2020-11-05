@@ -20,10 +20,10 @@ const saveToken = async(token) => {
     await redis.set("savedPushTokens", JSON.stringify(savedPushTokens));
 };
 
-const handlePushTokens = (message) => {
+const handlePushTokens = async(message) => {
     let notifications = [];
-
-    for (let pushToken of savedPushTokens) {
+    let token = JSON.parse(await redis.get('savedPushTokens'))
+    for (let pushToken of token) {
         if (!Expo.isExpoPushToken(pushToken)) {
             console.log('에러!');
             continue;
